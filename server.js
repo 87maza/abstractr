@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var port = process.env.PORT || 3000
 var app = express();
 var mongoose = require('mongoose');
+var config = require('./config.js')
 app.use(favicon(__dirname + '/android-icon-192x192.png'));
 
 app.use(morgan('short'));
