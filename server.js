@@ -21,8 +21,8 @@ app.use(express.static('public'));
 
 mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
 
-app.post('/api/results', function(req,res){
-    Bing.images(req.body.searchTerm, {skip: 20, top: 10}, function(error, res, body){
+app.get('/api/results', function(req,res){
+    Bing.images(req.query.search, {skip: 0, top: 10}, function(error, response, body){
       var results = {};
         for(var i=0; i<body.d.results.length; i++){
             results["result" + (i+1)] = {
@@ -32,19 +32,15 @@ app.post('/api/results', function(req,res){
                 context: body.d.results[i].SourceUrl
             }
         }
-      function getit(y){
-        console.log(y)
-        app.get('/api/results', function(req,res){
-        res.json(y);
-        })
-      }
-      getit(results);
+        res.json(results);
     });
 })
 
+
+      
 app.get('/api/history', function(req,res){
 
-res.send('fuck')
+res.send('farkk')
     
 })
 
