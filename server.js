@@ -22,7 +22,8 @@ app.use(express.static('public'));
 mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
 
 app.get('/api/results', function(req,res){
-    Bing.images(req.query.search, {skip: 0, top: 10}, function(error, response, body){
+    var offset = req.query.offset || 0;
+    Bing.images(req.query.search, {skip: offset, top: 10}, function(error, response, body){
       var results = {};
         for(var i=0; i<body.d.results.length; i++){
             results["result" + (i+1)] = {
