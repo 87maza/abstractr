@@ -48,18 +48,30 @@ app.get('/api/results', function(req,res){
     });
 })
 
+function clearCache(hist){
+    if (hist.length > 8) {
+        Searches.findOneAndRemove({}, function(err) {
+          if (err)
+            throw err;
+        })
+    }
+}
 
-      
 app.get('/api/history', function(req,res){
-
-
-    
-})
-
-
-
-
-
+    Searches.find({}, function (err, history) {
+        //find and iterate through the history array of objects, send them a json obj limit at top 15
+        if (err) return err;
+        else {
+            history = history.reverse().map(function(e) {
+                return { 
+                    term: e.term, 
+                    when: e.when 
+                };
+            })
+            res.json(history.slice(0,15));
+        }
+    })
+});
 
 
 app.listen(port, function(){
