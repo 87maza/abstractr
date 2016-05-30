@@ -8,6 +8,8 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var config = require('./config.js');
 var Bing = require('node-bing-api')({ accKey: "HUbThdlOtDm9tcc33MaX9Jei8H8Vv7TU2FurPoCwHXI" });
+var Searches = require('./searchModel.js');
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,8 +24,17 @@ app.use(express.static('public'));
 mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
 
 app.get('/api/results', function(req,res){
+//function to generate proper URL queries and offsets
     var offset = req.query.offset || 0;
+    var newSearch = new Searches();
+      newSearch.term = req.query.search;
+      newSearch.when = new Date();
+      newSearch.save(function(err) {
+        if (err)
+          throw err;
+      });
     Bing.images(req.query.search, {skip: offset, top: 10}, function(error, response, body){
+        //search Bing, response is not really used
       var results = {};
         for(var i=0; i<body.d.results.length; i++){
             results["result" + (i+1)] = {
@@ -41,7 +52,7 @@ app.get('/api/results', function(req,res){
       
 app.get('/api/history', function(req,res){
 
-res.send('farkk')
+
     
 })
 
