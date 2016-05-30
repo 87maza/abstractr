@@ -20,8 +20,8 @@ app.use(morgan('short'));
 //home route assets inside public folder
 app.use(express.static('public'));
 
-
-mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
+mongoose.connect('mongodb://admin:admin@ds033113.mlab.com:33113/abstractr');
+// mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
 
 app.get('/api/results', function(req,res){
 //function to generate proper URL queries and offsets
@@ -69,10 +69,10 @@ app.get('/api/history', function(req,res){
                 };
             })
             res.json(history.slice(0,15));
+            //all searches are still persisted to mongo but not shown on the front end, implement clearCache to remove
         }
     })
 });
-
 
 app.listen(port, function(){
 	console.log('runnin on ' + port)
